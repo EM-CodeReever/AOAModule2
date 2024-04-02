@@ -24,7 +24,89 @@
 
         </div>
     </section>
-
+    <p>From</p>
+    <select class="bg-gray-400" id="select-from">
+        <option value="Portmore">Portmore</option>
+        <option value="Bog Walk">Bog Walk</option>
+        <option value="Ewarton">Ewarton</option>
+        <option value="May Pen">May Pen</option>
+        <option value="Hayes">Hayes</option>
+        <option value="Rocky Point">Rocky Point</option>
+        <option value="Rest">Rest</option>
+        <option value="Alligator Pond">Alligator Pond</option>
+        <option value="Treasure Beach">Treasure Beach</option>
+        <option value="Santa Cruz">Santa Cruz</option>
+        <option value="Maggotty">Maggotty</option>
+        <option value="Black River">Black River</option>
+        <option value="Savanna-la-Mar">Savanna-la-Mar</option>
+        <option value="Negril">Negril</option>
+        <option value="Green Island">Green Island</option>
+        <option value="Lucea">Lucea</option>
+        <option value="Montego Bay">Montego Bay</option>
+        <option value="Wakefield">Wakefield</option>
+        <option value="Duncans">Duncans</option>
+        <option value="Stewart Town">Stewart Town</option>
+        <option value="Ocho Rios">Ocho Rios</option>
+        <option value="Moneague">Moneague</option>
+        <option value="Oracabessa">Oracabessa</option>
+        <option value="Annotto Bay">Annotto Bay</option>
+        <option value="Buff Bay">Buff Bay</option>
+        <option value="Hope Bay">Hope Bay</option>
+        <option value="Boston Bay">Boston Bay</option>
+        <option value="Hectors River">Hectors River</option>
+        <option value="Bath">Bath</option>
+        <option value="Morant Bay">Morant Bay</option>
+        <option value="Yallahs">Yallahs</option>
+        <option value="Seaforth">Seaforth</option>
+        <option value="Half-Way-Tree">Half-Way-Tree</option>
+        <option value="Balaclava">Balaclava</option>
+        <option value="Highgate">Highgate</option>
+        <option value="Old Harbour">Old Harbour</option>
+        <option value="Frankfield">Frankfield</option>
+      </select>
+        <p>To</p>
+        <select class="bg-gray-400" id="select-to">
+            <option value="Portmore">Portmore</option>
+            <option value="Bog Walk">Bog Walk</option>
+            <option value="Ewarton">Ewarton</option>
+            <option value="May Pen">May Pen</option>
+            <option value="Hayes">Hayes</option>
+            <option value="Rocky Point">Rocky Point</option>
+            <option value="Rest">Rest</option>
+            <option value="Alligator Pond">Alligator Pond</option>
+            <option value="Treasure Beach">Treasure Beach</option>
+            <option value="Santa Cruz">Santa Cruz</option>
+            <option value="Maggotty">Maggotty</option>
+            <option value="Black River">Black River</option>
+            <option value="Savanna-la-Mar">Savanna-la-Mar</option>
+            <option value="Negril">Negril</option>
+            <option value="Green Island">Green Island</option>
+            <option value="Lucea">Lucea</option>
+            <option value="Montego Bay">Montego Bay</option>
+            <option value="Wakefield">Wakefield</option>
+            <option value="Duncans">Duncans</option>
+            <option value="Stewart Town">Stewart Town</option>
+            <option value="Ocho Rios">Ocho Rios</option>
+            <option value="Moneague">Moneague</option>
+            <option value="Oracabessa">Oracabessa</option>
+            <option value="Annotto Bay">Annotto Bay</option>
+            <option value="Buff Bay">Buff Bay</option>
+            <option value="Hope Bay">Hope Bay</option>
+            <option value="Boston Bay">Boston Bay</option>
+            <option value="Hectors River">Hectors River</option>
+            <option value="Bath">Bath</option>
+            <option value="Morant Bay">Morant Bay</option>
+            <option value="Yallahs">Yallahs</option>
+            <option value="Seaforth">Seaforth</option>
+            <option value="Half-Way-Tree">Half-Way-Tree</option>
+            <option value="Balaclava">Balaclava</option>
+            <option value="Highgate">Highgate</option>
+            <option value="Old Harbour">Old Harbour</option>
+            <option value="Frankfield">Frankfield</option>
+          </select>
+    <button onclick="greedySearch(document.getElementById('select-from').value,document.getElementById('select-to').value)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Greedy Search</button>
+    <button onclick="findPath()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">A* Search</button>
+    <button onclick="findPath()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Best First Search</button>
 <script>
 
 var cy = cytoscape({
@@ -38,22 +120,22 @@ style: [ // the stylesheet for the graph
   {
     selector: 'node',
     style: {
-      'background-color': '#ff0000',
       'label': 'data(id)',
       'color': 'black',
     }
   },
-
   {
     selector: 'edge',
     style: {
-      'width': 3,
-      'line-color': '#000',
-      'target-arrow-color': '#000',
-      'target-arrow-shape': 'triangle',
-      'curve-style': 'bezier'
+
+    //   'target-arrow-shape': 'triangle',
+      'curve-style': 'bezier',
+
     }
+  
   }
+
+
 ],
 
 layout: {
@@ -154,10 +236,58 @@ cy.add([
 ]);
 
 
-function generateJson(){
-    var elements = cy.json().elements;
-    console.log(JSON.stringify(elements));
+
+
+//[id='This syntax for id with space']
+
+function calculateDistance(node1, node2) {
+    const x1 = node1.position().x;
+    const y1 = node1.position().y;
+    const x2 = node2.position().x;
+    const y2 = node2.position().y;
+    
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
+
+function greedySearch(startNodeId, targetNodeId) {
+    cy.elements().unselect();
+    console.log('runs');
+    const startNode = cy.$("[id='"+ startNodeId +"']")
+    const targetNode = cy.$("[id='"+ targetNodeId +"']")
+    
+    // Initialize the path with the start node
+    let current = startNode;
+    let path = [startNode];
+    
+    while (current.id() !== targetNode.id()) {
+        const adjacentEdges = current.connectedEdges();
+        let minDistance = Infinity;
+        let nextNode = null;
+        
+        // Find the adjacent node with the shortest distance to the target node
+        adjacentEdges.forEach(edge => {
+            const neighbor = edge.connectedNodes().not(current);
+            // console.log(neighbor.position());
+            const distanceToTarget = calculateDistance(neighbor, targetNode);
+            if (distanceToTarget < minDistance) {
+                minDistance = distanceToTarget;
+                nextNode = neighbor;
+            }
+        });
+        
+        // If no next node is found, break the loop
+        if (!nextNode) break;
+        
+        // Move to the next node and add it to the path
+        current = nextNode;
+        path.push(nextNode);
+    }
+    
+    path.forEach(node => {
+        node.select();
+    });
+}
+
 
 </script>
 </html>
