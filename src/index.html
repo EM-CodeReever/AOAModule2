@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cytoscape@3.28.1/dist/cytoscape.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <section  class="text-white bg-gray-800 w-full">
+        <h1 class="text-2xl">Analysis of Algorithms - Module 2</h1>
+            <p>Group Members
+                <ul>
+                    <li>1. Elliot Morrison</li>
+                    <li>2. Matthew Cole</li>
+                    <li>3. Garaine Baker</li>
+                </ul>
+            </p>
+        <div id="cy" class="bg-gray-800">
+
+        </div>
+    </section>
+
+<script>
+
+var cy = cytoscape({
+
+container: document.getElementById('cy'), // container to render in
+
+elements: [],// Empty array to hold the elements, I added them using cy.add() below
+
+
+style: [ // the stylesheet for the graph
+  {
+    selector: 'node',
+    style: {
+      'background-color': '#ff0000',
+      'label': 'data(id)',
+      'color': 'black',
+    }
+  },
+
+  {
+    selector: 'edge',
+    style: {
+      'width': 3,
+      'line-color': '#000',
+      'target-arrow-color': '#000',
+      'target-arrow-shape': 'triangle',
+      'curve-style': 'bezier'
+    }
+  }
+],
+
+layout: {
+  name: 'grid',
+  rows: 1
+}
+
+});
+
+
+cy.zoom({
+  level: 0.7, // the zoom level
+  renderedPosition: { x: 100, y: 100 }
+});
+
+cy.zoomingEnabled( false );
+cy.panningEnabled( false );
+
+cy.add([
+{ group: 'nodes', data: { id: 'Portmore' }, position: { x: 1174.2857142857142, y: 511.4285714285714 } },
+  { group: 'nodes', data: { id: 'Bog Walk' }, position: { x: 1138.5714285714287, y: 385.7142857142857 } },
+  { group: 'nodes', data: { id: 'Ewarton' }, position: { x: 1075.7142857142858, y: 307.1428571428571 } },
+  { group: 'nodes', data: { id: 'May Pen' }, position: { x: 861.4285714285714, y: 520 } },
+  { group: 'nodes', data: { id: 'Hayes' }, position: { x: 881.4285714285713, y: 605.7142857142858 } },
+  { group: 'nodes', data: { id: 'Rocky Point' }, position: { x: 878.5714285714286, y: 692.857142857143 } },
+  { group: 'nodes', data: { id: 'Rest' }, position: { x: 788.5714285714286, y: 610 } },
+  { group: 'nodes', data: { id: 'Alligator Pond' }, position: { x: 638.5714285714284, y: 590 } },
+  { group: 'nodes', data: { id: 'Treasure Beach' }, position: { x: 470, y: 580 } },
+  { group: 'nodes', data: { id: 'Santa Cruz' }, position: { x: 541.4285714285713, y: 421.42857142857144 } },
+  { group: 'nodes', data: { id: 'Maggotty' }, position: { x: 471.42857142857144, y: 291.42857142857144 } },
+  { group: 'nodes', data: { id: 'Black River' }, position: { x: 399.99999999999994, y: 471.4285714285714 } },
+  { group: 'nodes', data: { id: 'Savanna-la-Mar' }, position: { x: 254.28571428571414, y: 305.7142857142857 } },
+  { group: 'nodes', data: { id: 'Negril' }, position: { x: -8.5714285714289, y: 245.71428571428572 } },
+  { group: 'nodes', data: { id: 'Green Island' }, position: { x: 28.57142857142853, y: 137.14285714285714 } },
+  { group: 'nodes', data: { id: 'Lucea' }, position: { x: 149.99999999999994, y: 77.14285714285711 } },
+  { group: 'nodes', data: { id: 'Montego Bay' }, position: { x: 332.8571428571429, y: 57.142857142857125 } },
+  { group: 'nodes', data: { id: 'Wakefield' }, position: { x: 501.4285714285712, y: 79.99999999999997 } },
+  { group: 'nodes', data: { id: 'Duncans' }, position: { x: 675.7142857142858, y: 75.7142857142857 } },
+  { group: 'nodes', data: { id: 'Stewart Town' }, position: { x: 704.2857142857143, y: 161.4285714285714 } },
+  { group: 'nodes', data: { id: 'Ocho Rios' }, position: { x: 1005.7142857142858, y: 147.14285714285714 } },
+  { group: 'nodes', data: { id: 'Moneague' }, position: { x: 954.2857142857143, y: 264.2857142857143 } },
+  { group: 'nodes', data: { id: 'Oracabessa' }, position: { x: 1118.5714285714287, y: 127.14285714285714 } },
+  { group: 'nodes', data: { id: 'Annotto Bay' }, position: { x: 1287.142857142857, y: 241.42857142857144 } },
+  { group: 'nodes', data: { id: 'Buff Bay' }, position: { x: 1381.4285714285716, y: 272.85714285714283 } },
+  { group: 'nodes', data: { id: 'Hope Bay' }, position: { x: 1471.4285714285713, y: 301.4285714285714 } },
+  { group: 'nodes', data: { id: 'Boston Bay' }, position: { x: 1625.714285714285, y: 348.57142857142856 } },
+  { group: 'nodes', data: { id: 'Hectors River' }, position: { x: 1687.1428571428567, y: 458.57142857142856 } },
+  { group: 'nodes', data: { id: 'Bath' }, position: { x: 1595.714285714285, y: 497.14285714285717 } },
+  { group: 'nodes', data: { id: 'Morant Bay' }, position: { x: 1579.9999999999995, y: 580 } },
+  { group: 'nodes', data: { id: 'Yallahs' }, position: { x: 1419.9999999999993, y: 565.7142857142858 } },
+  { group: 'nodes', data: { id: 'Seaforth' }, position: { x: 1468.571428571428, y: 492.85714285714283 } },
+  { group: 'nodes', data: { id: 'Half-Way-Tree' }, position: { x: 1284.2857142857138, y: 485.7142857142857 } },
+  { group: 'nodes', data: { id: 'Balaclava' }, position: { x: 609.9999999999995, y: 305.71428571428567 } },
+  { group: 'nodes', data: { id: 'Highgate' }, position: { x: 1187.1428571428564, y: 284.2857142857143 } },
+  { group: 'nodes', data: { id: 'Old Harbour' }, position: { x: 987.1428571428565, y: 544.2857142857144 } },
+  { group: 'nodes', data: { id: 'Frankfield' }, position: { x: 767.1428571428572, y: 337.14285714285717 } },
+  // Edges
+  { group: 'edges', data: { id: 'e0', source: 'Portmore', target: 'Bog Walk' } },
+  { group: 'edges', data: { id: 'e1', source: 'Bog Walk', target: 'Ewarton' } },
+  { group: 'edges', data: { id: 'e2', source: 'Ewarton', target: 'May Pen' } },
+  { group: 'edges', data: { id: 'e3', source: 'May Pen', target: 'Hayes' } },
+  { group: 'edges', data: { id: 'e4', source: 'Hayes', target: 'Rocky Point' } },
+  { group: 'edges', data: { id: 'e5', source: 'Rocky Point', target: 'Rest' } },
+  { group: 'edges', data: { id: 'e6', source: 'Rest', target: 'Alligator Pond' } },
+  { group: 'edges', data: { id: 'e7', source: 'Alligator Pond', target: 'Treasure Beach' } },
+  { group: 'edges', data: { id: 'e8', source: 'Treasure Beach', target: 'Santa Cruz' } },
+  { group: 'edges', data: { id: 'e9', source: 'Santa Cruz', target: 'Maggotty' } },
+  { group: 'edges', data: { id: 'e10', source: 'Maggotty', target: 'Black River' } },
+  { group: 'edges', data: { id: 'e11', source: 'Black River', target: 'Savanna-la-Mar' } },
+  { group: 'edges', data: { id: 'e12', source: 'Savanna-la-Mar', target: 'Negril' } },
+  { group: 'edges', data: { id: 'e13', source: 'Negril', target: 'Green Island' } },
+  { group: 'edges', data: { id: 'e14', source: 'Green Island', target: 'Lucea' } },
+  { group: 'edges', data: { id: 'e15', source: 'Lucea', target: 'Montego Bay' } },
+  { group: 'edges', data: { id: 'e16', source: 'Montego Bay', target: 'Wakefield' } },
+  { group: 'edges', data: { id: 'e17', source: 'Wakefield', target: 'Duncans' } },
+  { group: 'edges', data: { id: 'e18', source: 'Duncans', target: 'Stewart Town' } },
+  { group: 'edges', data: { id: 'e19', source: 'Stewart Town', target: 'Ocho Rios' } },
+  { group: 'edges', data: { id: 'e20', source: 'Ocho Rios', target: 'Moneague' } },
+  { group: 'edges', data: { id: 'e21', source: 'Moneague', target: 'Oracabessa' } },
+  { group: 'edges', data: { id: 'e22', source: 'Oracabessa', target: 'Annotto Bay' } },
+  { group: 'edges', data: { id: 'e23', source: 'Annotto Bay', target: 'Buff Bay' } },
+  { group: 'edges', data: { id: 'e24', source: 'Buff Bay', target: 'Hope Bay' } },
+  { group: 'edges', data: { id: 'e25', source: 'Hope Bay', target: 'Boston Bay' } },
+  { group: 'edges', data: { id: 'e26', source: 'Boston Bay', target: 'Hectors River' } },
+  { group: 'edges', data: { id: 'e27', source: 'Hectors River', target: 'Bath' } },
+  { group: 'edges', data: { id: 'e28', source: 'Bath', target: 'Morant Bay' } },
+  { group: 'edges', data: { id: 'e29', source: 'Morant Bay', target: 'Yallahs' } },
+  { group: 'edges', data: { id: 'e30', source: 'Yallahs', target: 'Seaforth' } },
+  { group: 'edges', data: { id: 'e31', source: 'Seaforth', target: 'Half-Way-Tree' } },
+  { group: 'edges', data: { id: 'e33', source: 'Balaclava', target: 'Maggotty' } },
+  { group: 'edges', data: { id: 'e34', source: 'Frankfield', target: 'Balaclava' } },
+  { group: 'edges', data: { id: 'e35', source: 'Ewarton', target: 'Frankfield' } },
+  { group: 'edges', data: { id: 'e36', source: 'Annotto Bay', target: 'Highgate' } },
+  { group: 'edges', data: { id: 'e37', source: 'Highgate', target: 'Ewarton' } },
+  { group: 'edges', data: { id: 'e38', source: 'Half-Way-Tree', target: 'Portmore' } },
+  { group: 'edges', data: { id: 'e39', source: 'Portmore', target: 'Old Harbour' } },
+  { group: 'edges', data: { id: 'e40', source: 'Old Harbour', target: 'May Pen' } }
+]);
+
+
+function generateJson(){
+    var elements = cy.json().elements;
+    console.log(JSON.stringify(elements));
+}
+
+</script>
+</html>
