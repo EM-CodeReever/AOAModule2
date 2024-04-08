@@ -17,15 +17,21 @@
 //https://blog.bitsrc.io/advanced-data-structures-implementing-the-a-algorithm-in-javascript-5ae1e8a4ab2f
 
 // Define the A* search function
-  function aStar(start, goal) {
+  function aStar(startNodeId, targetNodeId, cy, distanceFn) {
+
+
+    const startNode = cy.$("[id='"+ startNodeId +"']")
+    const targetNode = cy.$("[id='"+ targetNodeId +"']")
+
+
     // Create an empty data structure to store the explored paths
     let explored = [];
   
     // Create a data structure to store the paths that are being explored
     let open = [{
-      state: start,
+      state: startNode,
       cost: 0,
-      estimate: heuristic(start)
+      estimate: distanceFn(startNode, targetNode)
     }];
   
     // While there are paths being explored
@@ -41,7 +47,7 @@
       // Add this nodeto the explored paths
       explored.push(node);
       // If this nodereaches the goal, return thenode 
-      if (node.state.x == goal.x && node.state.y == goal.y) {
+      if (node.state.id() == targetNode.id()) {
         return explored
       }
   
@@ -83,3 +89,17 @@
     // If there are no paths left to explore, return null to indicate that the goal cannot be reached
     return null;
   }
+
+
+  function generateNextSteps(state) {
+    // Define an array to store the next steps
+    let next = [];
+
+    // Check if the current state has any valid neighbors
+
+        // If the current state has a neighbor to the left, add it to the array of next steps
+
+         // If the current state has a neighbor to the right, add it to the array of next steps
+
+  }
+
