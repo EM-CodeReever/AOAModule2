@@ -48,12 +48,16 @@
       explored.push(node);
       // If this nodereaches the goal, return thenode 
       if (node.state.id() == targetNode.id()) {
-        return explored
+        // return explored //instead, just render the path
+        explored.forEach(node => {
+          node.state.select();
+        });
+        return;
       }
   
   
       // Generate the possible next steps from this node's state
-      let next = generateNextSteps(node.state);
+      let next = generateNextSteps(node.state, distanceFn);
   
       // For each possible next step
       for (let i = 0; i < next.length; i++) {
@@ -63,14 +67,12 @@
   
         // Check if this step has already been explored
         let isExplored = (explored.find( e => {
-            return e.state.x == step.state.x && 
-                e.state.y == step.state.y
+            return e.state.id() == step.state.id()
         }))
 
         //avoid repeated nodes during the calculation of neighbors
         let isopen = (open.find( e => {
-            return e.state.x == step.state.x && 
-                e.state.y == step.state.y
+            return e.state.id() == step.state.id()    
         }))
 
 
@@ -80,26 +82,48 @@
           open.push({
             state: step.state,
             cost: cost,
-            estimate: cost + heuristic(step.state)
+            estimate: cost + distanceFn(step.state, targetNode)
           });
         }
       }
     }
   
+    alert("No path found");
     // If there are no paths left to explore, return null to indicate that the goal cannot be reached
     return null;
   }
 
 
-  function generateNextSteps(state) {
+  function generateNextSteps(currentNode, distanceFn) {
     // Define an array to store the next steps
     let next = [];
 
+    console.log(currentNode);
+
     // Check if the current state has any valid neighbors
 
-        // If the current state has a neighbor to the left, add it to the array of next steps
+    if (currentNode.connectedEdges().length > 0) {
 
-         // If the current state has a neighbor to the right, add it to the array of next steps
+      // Get the paths coonected of the current node
+      const adjacentEdges = currentNode.connectedEdges();
+
+      adjacentEdges.forEach(edge => {
+        let node = edge.target()
+
+        // if(visited.includes(node.id())) return;
+
+        
+       next.push({
+          state: node,
+          cost: distanceFn(currentNode, node) // could just be 1
+       });
+        
+        
+      });
+
+    }
+
+    return next;
 
   }
 
