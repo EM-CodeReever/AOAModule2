@@ -129,8 +129,8 @@ style: [ // the stylesheet for the graph
     selector: 'edge',
     style: {
 
-      'target-arrow-color': '#c00',
-      'target-arrow-shape': 'triangle',
+      // 'target-arrow-color': '#c00',
+      // 'target-arrow-shape': 'triangle',
       'curve-style': 'bezier',
 
     }
@@ -260,55 +260,96 @@ function calculateDistance(node1, node2) {
 console.log(calculateDistance(cy.$("[id='Annotto Bay']"), cy.$("[id='Oracabessa']")));
 
 function greedySearch(startNodeId, targetNodeId) {
-    cy.elements().unselect();
-    const startNode = cy.$("[id='"+ startNodeId +"']")
+  let nodeFoundEarly = false;
+  
+  const startNode = cy.$("[id='"+ startNodeId +"']")
     const targetNode = cy.$("[id='"+ targetNodeId +"']")
-    let visited = [];
-    visited.push(startNode.id());
+    const visitedEdges = [];
+    const visited = new Set(); // To keep track of visited nodes
+    visited.add(startNode.id());
     
-    // Initialize the path with the start node
+    
     let current = startNode;
-
     let path = [startNode];
-    console.log("Trying to get to: " + targetNode.id());
+    
     while (current.id() !== targetNode.id()) {
-      console.log("current ID: " + current.id());
-
+      console.log('Current node:', current.id());
         const adjacentEdges = current.connectedEdges();
-        console.log("connected edges: " + current.connectedEdges());
         let minDistance = Infinity;
         let nextNode = null;
         let chosenEdge = null;
         
-        // Find the adjacent node with the shortest distance to the target node
+        // Find the unvisited neighbor node closest to the target node
         adjacentEdges.forEach(edge => {
-          var node = edge.target()
-          if(visited.includes(node.id())) return;
-          console.log("node: " + node.id());
-              const distance = calculateDistance(current, node);
-              console.log("distance: " + distance);
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    nextNode = node;
+            const neighbor = edge.connectedNodes().not(current);
+            const neighborId = neighbor.id();
+            if(neighborId === targetNode.id()){
+              chosenEdge = edge;
+              nextNode = neighbor;
+              nodeFoundEarly = true;
+            }
+            // Skip visited nodes
+            if (!visited.has(neighborId) && !nodeFoundEarly) {
+                const distanceToTarget = calculateDistance(neighbor, current);
+                if (distanceToTarget < minDistance) {
+                    minDistance = distanceToTarget;
+                    nextNode = neighbor;
                     chosenEdge = edge;
                 }
-            });
-
+            }
+        });
+        // If no unvisited neighbor node is found, backtrack
+        if (!nextNode) {
+            let nearestVisitedNode = null;
+            let minVisitedDistance = Infinity;
             
-
-        console.log("next node: " + nextNode.id());
-        if (current.id() == targetNode.id()) break;
-
-        current = nextNode;
-        visited.push(nextNode.id());
-        path.push(nextNode);
-        chosenEdge.select();
+            // Find the nearest visited node to the target node
+            visited.forEach(visitedNodeId => {
+                const visitedNode = cy.$("[id='"+ visitedNodeId +"']")
+                const distanceToTarget = calculateDistance(visitedNode, targetNode);
+                if (distanceToTarget < minVisitedDistance) {
+                    minVisitedDistance = distanceToTarget;
+                    nearestVisitedNode = visitedNode;
+                }
+            });
+            
+            // Set the nearest visited node as the next node
+            current = nearestVisitedNode;
+            path.push(nearestVisitedNode);
+            
+            // Check for loops
+            if (path.length > 1 && nearestVisitedNode.id() === path[path.length - 2].id()) {
+                // If loop detected, backtrack to unvisited nodes
+                while (path.length > 1 && visited.has(current.id())) {
+                    path.pop(); // Remove current node
+                    current = path[path.length - 1]; // Set current node to the previous node
+                }
+            }
+        } else {
+            // Move to the next node and mark it as visited
+            current = nextNode;
+            visited.add(nextNode.id());
+            path.push(nextNode);
+            visitedEdges.push(chosenEdge);
+        }
+        
+        // Break if no path to target exists
+        if (!current) break;
     }
     
     path.forEach(node => {
         node.select();
     });
+
+    visitedEdges.forEach(edge => {
+        edge.select();
+    });
+
+    console.log('Path found:', path.map(node => node.id()).join(' -> '));
+
+    
 }
+
 
 function bestFirstSearch(startNodeId, targetNodeId) {
     // Clear any previous selections
