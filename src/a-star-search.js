@@ -31,7 +31,8 @@
     let open = [{
       state: startNode,
       cost: 0,
-      estimate: distanceFn(startNode, targetNode)
+      estimate: distanceFn(startNode, targetNode),
+      path: [startNode] // Store the path that led to this node
     }];
   
     // While there are paths being explored
@@ -46,12 +47,14 @@
   
       // Add this nodeto the explored paths
       explored.push(node);
-      // If this nodereaches the goal, return thenode 
+      // If this nodereaches the goal, return the path that led to this node
       if (node.state.id() == targetNode.id()) {
-        // return explored //instead, just render the path
-        explored.forEach(node => {
-          node.state.select();
+      
+        //render path instead of returning it
+        node.path.forEach(node => {
+          node.select();
         });
+
         return;
       }
   
@@ -82,23 +85,21 @@
           open.push({
             state: step.state,
             cost: cost,
-            estimate: cost + distanceFn(step.state, targetNode)
+            estimate: cost + distanceFn(step.state, targetNode),
+            path: [...node.path, step.state] // Store the path that led to this node
+
           });
         }
       }
     }
   
     alert("No path found");
-    // If there are no paths left to explore, return null to indicate that the goal cannot be reached
-    return null;
   }
 
 
   function generateNextSteps(currentNode, distanceFn) {
     // Define an array to store the next steps
     let next = [];
-
-    console.log(currentNode);
 
     // Check if the current state has any valid neighbors
 
@@ -126,4 +127,3 @@
     return next;
 
   }
-
