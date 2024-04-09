@@ -107,7 +107,7 @@
           </select>
     <button onclick="greedySearch(document.getElementById('select-from').value, document.getElementById('select-to').value)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Greedy Search</button>
     <button onclick="aStar(document.getElementById('select-from').value, document.getElementById('select-to').value, cy, calculateDistance)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">A* Search</button>
-    <button onclick="bfs(document.getElementById('select-from').value,document.getElementById('select-to').value)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Best First Search</button>
+    <button onclick="bestFirstSearch(document.getElementById('select-from').value,document.getElementById('select-to').value)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Best First Search</button>
 <script>
 
 var cy = cytoscape({
