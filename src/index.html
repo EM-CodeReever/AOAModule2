@@ -107,7 +107,7 @@
           </select>
     <button onclick="greedySearch(document.getElementById('select-from').value, document.getElementById('select-to').value)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Greedy Search</button>
     <button onclick="aStar(document.getElementById('select-from').value, document.getElementById('select-to').value, cy, calculateDistance)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">A* Search</button>
-    <button onclick="findPath()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Best First Search</button>
+    <button onclick="bestFirstSearch(document.getElementById('select-from').value,document.getElementById('select-to').value)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Best First Search</button>
 <script>
 
 var cy = cytoscape({
@@ -135,8 +135,7 @@ style: [ // the stylesheet for the graph
 
     }
   
-  }
-
+  },
 
 ],
 
@@ -310,6 +309,175 @@ function greedySearch(startNodeId, targetNodeId) {
         node.select();
     });
 }
+
+function bestFirstSearch(startNodeId, targetNodeId) {
+    // Clear any previous selections
+    cy.elements().unselect();
+
+    // Retrieve the start and target nodes based on their IDs
+    const startNode = cy.$("[id='"+ startNodeId +"']");
+    const targetNode = cy.$("[id='"+ targetNodeId +"']");
+
+    // Initialize an empty queue to keep track of nodes to visit
+    let queue = [];
+    // Initialize a set to keep track of visited nodes
+    let visited = new Set();
+    // Initialize an object to keep track of parent nodes
+    let parents = {};
+    // Initialize an object to keep track of parent edges
+    let parentEdges = {};
+
+    // Enqueue the start node
+    queue.push(startNode);
+    visited.add(startNode.id());
+    parents[startNode.id()] = null;
+
+    // Perform BFS until the queue is empty
+    while (queue.length > 0) {
+        // Dequeue the current node
+        let current = queue.shift();
+
+        // If the current node is the target node, stop the search
+        if (current.id() === targetNode.id()) {
+            break;
+        }
+
+        // Get the adjacent edges of the current node
+        const adjacentEdges = current.connectedEdges();
+
+        // Iterate through each adjacent edge
+        adjacentEdges.forEach(edge => {
+            // Get the target node of the edge
+            const node = edge.target();
+            
+            // If the target node has not been visited yet
+            if (!visited.has(node.id())) {
+                // Mark the node as visited
+                visited.add(node.id());
+                // Enqueue the node for further exploration
+                queue.push(node);
+                // Record the parent node of the target node
+                parents[node.id()] = current;
+                // Record the parent edge of the target node
+                parentEdges[node.id()] = edge;
+            }
+        });
+    }
+
+    // Trace back the path from the target node to the start node
+    let currentNode = targetNode;
+    let path = [];
+    while (currentNode !== null) {
+        path.unshift(currentNode);
+        currentNode = parents[currentNode.id()];
+    }
+
+    // Select the nodes along the path
+    path.forEach(node => {
+        node.select();
+    });
+
+    // Select the edges along the path
+    for (let i = 0; i < path.length - 1; i++) {
+        const sourceNodeId = path[i].id();
+        const targetNodeId = path[i + 1].id();
+        const edge = parentEdges[targetNodeId];
+        edge.select();
+    }
+}
+
+//HAVE SOME QUESTIONS ABOUT HOW THIS WORKS SOON REMOVE IT
+
+// function bestFirstSearch(startNodeId, targetNodeId) {
+//     // Clear any previous selections
+//     cy.elements().removeClass('visited path').unselect();
+
+//     // Retrieve the start and target nodes based on their IDs
+//     const startNode = cy.$("[id='"+ startNodeId +"']");
+//     const targetNode = cy.$("[id='"+ targetNodeId +"']");
+
+//     // Initialize an empty queue to keep track of nodes to visit
+//     let queue = [];
+//     // Initialize a set to keep track of visited nodes
+//     let visited = new Set();
+//     // Initialize an object to keep track of parent nodes
+//     let parents = {};
+//     // Initialize an object to keep track of parent edges
+//     let parentEdges = {};
+
+//     // Enqueue the start node
+//     queue.push(startNode);
+//     visited.add(startNode.id());
+//     parents[startNode.id()] = null;
+
+//     // Perform BFS until the queue is empty or target is found
+//     while (queue.length > 0) {
+//         // Dequeue the current node
+//         let current = queue.shift();
+
+//         // If the current node is the target node, stop the search
+//         if (current.id() === targetNode.id()) {
+//             break;
+//         }
+
+//         // Get the adjacent edges of the current node
+//         const adjacentEdges = current.connectedEdges();
+
+//         // Iterate through each adjacent edge
+//         adjacentEdges.forEach(edge => {
+//             // Get the target node of the edge
+//             const node = edge.target();
+            
+//             // If the target node has not been visited yet
+//             if (!visited.has(node.id())) {
+//                 // Mark the node as visited
+//                 visited.add(node.id());
+//                 // Enqueue the node for further exploration
+//                 queue.push(node);
+//                 // Record the parent node of the target node
+//                 parents[node.id()] = current;
+//                 // Record the parent edge of the target node
+//                 parentEdges[node.id()] = edge;
+//             }
+//         });
+//     }
+
+//     // Trace back the path from the target node to the start node
+//     let currentNode = targetNode;
+//     let path = [];
+//     while (currentNode !== null) {
+//         path.unshift(currentNode);
+//         currentNode = parents[currentNode.id()];
+//     }
+
+//     // Highlight the visited nodes
+//     visited.forEach(nodeId => {
+//         cy.$("[id='"+ nodeId +"']").addClass('visited').select();
+//     });
+
+//     // Highlight the nodes along the path
+//     path.forEach(node => {
+//         node.addClass('path').select();
+//     });
+
+//     // Highlight the edges along the path
+//     for (let i = 0; i < path.length - 1; i++) {
+//         const sourceNodeId = path[i].id();
+//         const targetNodeId = path[i + 1].id();
+//         const edge = parentEdges[targetNodeId];
+//         edge.addClass('path').select();
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
 
 
 </script>
