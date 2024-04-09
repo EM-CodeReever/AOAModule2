@@ -49,9 +49,10 @@
       // If this nodereaches the goal, return thenode 
       if (node.state.id() == targetNode.id()) {
         // return explored //instead, just render the path
-        explored.forEach(node => {
-          node.state.select();
-        });
+
+        renderPath(explored, startNode, targetNode);
+        // renderPath2(explored, targetNode);
+        
         return;
       }
   
@@ -98,8 +99,6 @@
     // Define an array to store the next steps
     let next = [];
 
-    console.log(currentNode);
-
     // Check if the current state has any valid neighbors
 
     if (currentNode.connectedEdges().length > 0) {
@@ -127,3 +126,93 @@
 
   }
 
+
+  function renderPath(explored, startNode, targetNode) {
+    let path = [];
+
+    
+    let startCoordinates = startNode.position();
+    let targetCoordinates = targetNode.position();
+
+
+    let x1 = startCoordinates.x, y1 = startCoordinates.y, x2 = targetCoordinates.x, y2 = targetCoordinates.y;
+
+
+    let isSteep = Math.abs(y2 - y1) > Math.abs(x2 - x1);
+
+    if (isSteep) {
+      [x1, y1] = [y1, x1];
+      [x2, y2] = [y2, x2];
+    }
+
+    let isReversed = false;
+
+    if (x1 > x2) {
+      [x1, x2] = [x2, x1];
+      [y1, y2] = [y2, y1];
+      isReversed = true;
+    }
+    let deltax = x2 - x1, deltay = Math.abs(y2 - y1);
+    let error = Math.floor(deltax / 2);
+    let y = y1;
+    let ystep = null;
+    if (y1 < y2) {
+      ystep = 1;
+    } else {
+      ystep = -1;
+    }
+    for (let x = x1; x <= x2; x++) {
+      if (isSteep) {
+        path.push([y, x]);
+      } else {
+        path.push([x, y]);
+      }
+      error -= deltay;
+      if (error < 0) {
+        y += ystep;
+        error += deltax;
+      }
+    }
+  
+    // If the line is reversed, reverse the order of the points in the path
+    if (isReversed) {
+      path = path.reverse();
+    }
+  
+    console.log(path);
+    return path;
+  
+
+
+  
+   
+  
+    // path.forEach(node => {
+    //   node.state.select();
+
+    // });
+  }
+
+
+function renderPath2(explored, targetNode) {
+
+  let localExplored = [...explored];
+  let path = [];
+
+  localExplored.sort((a, b) => {
+    return a.estimate - b.estimate;
+  });
+
+  localExplored.forEach(node => {
+    
+    path.push(node.state);
+    if(node.state.id() == targetNode.id()) return;
+  });
+
+  path.forEach(node => {
+    node.select();
+  });
+
+
+  return path;
+}
