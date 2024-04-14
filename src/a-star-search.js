@@ -56,6 +56,16 @@
           node.select();
         });
 
+
+        let totalDistance = 0;
+
+        for (let i = 0; i < node.path.length - 1; i++) {
+          totalDistance += distanceFn(node.path[i], node.path[i + 1])
+        }
+
+        alert("Total distance: " + totalDistance);
+
+       
         return;
       }
   
