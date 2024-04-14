@@ -18,6 +18,7 @@
 
 // Define the A* search function
   function aStar(startNodeId, targetNodeId, cy, distanceFn) {
+    cy.elements().unselect();
 
 
     const startNode = cy.$("[id='"+ startNodeId +"']")

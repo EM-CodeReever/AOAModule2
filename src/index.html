@@ -260,6 +260,7 @@ function calculateDistance(node1, node2) {
 console.log(calculateDistance(cy.$("[id='Annotto Bay']"), cy.$("[id='Oracabessa']")));
 
 function greedySearch(startNodeId, targetNodeId) {
+    cy.elements().unselect();
   let nodeFoundEarly = false;
   
   const startNode = cy.$("[id='"+ startNodeId +"']")
@@ -273,7 +274,7 @@ function greedySearch(startNodeId, targetNodeId) {
     let path = [startNode];
     
     while (current.id() !== targetNode.id()) {
-      console.log('Current node:', current.id());
+      console.log('Travelling to --> ', current.id());
         const adjacentEdges = current.connectedEdges();
         let minDistance = Infinity;
         let nextNode = null;
@@ -300,6 +301,7 @@ function greedySearch(startNodeId, targetNodeId) {
         });
         // If no unvisited neighbor node is found, backtrack
         if (!nextNode) {
+            console.log('Backtracking...');
             let nearestVisitedNode = null;
             let minVisitedDistance = Infinity;
             
